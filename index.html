@@ -1,155 +1,131 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Choisissez votre définition préférée</title>
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-            background: #2c2f33;
-            color: #ffffff;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-        }
-        #game {
-            background: #23272a;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-            max-width: 600px;
-        }
-        #prompt {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-        }
-        .choice {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        button {
-            padding: 20px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            background: #43b581;
-            color: white;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-            word-wrap: break-word;
-            text-align: left;
-        }
-        button:hover {
-            transform: scale(1.1);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-        }
-        button:active {
-            transform: scale(1.05);
-        }
-    </style>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-</head>
-<body>
-    <h1>Choisissez votre définition préférée</h1>
-    <div id="game">
-        <p id="prompt">Quelle définition de la liberté préférez-vous ?</p>
-        <div class="choice">
-            <button id="option1"></button>
-            <button id="option2"></button>
-        </div>
-    </div>
-
-    <script>
-        // Liste des définitions
-        const definitions = [
-            "La liberté se mesure à sa capacité à résoudre des problèmes concrets et à améliorer les conditions de vie.",
-            "La liberté est la capacité de choisir le bien, mais elle est entravée par le péché, nécessitant la grâce divine pour être pleinement réalisée.",
-            "La liberté se trouve dans l'obéissance aux lois que l'on s'est données soi-même en participant à la volonté générale.",
-            "La liberté est l'affirmation créatrice de soi-même, au-delà des valeurs imposées par la société ou la morale traditionnelle.",
-            "La liberté est le droit inviolable de chaque individu à posséder et à disposer de sa personne et de ses biens.",
-            "La liberté est intérieure et consiste à maîtriser ses passions et à se libérer des attachements au monde extérieur.",
-            "La liberté est l'émancipation des contraintes économiques et sociales au sein d'une société.",
-            "La liberté véritable réside dans la compréhension des lois nécessaires de la nature et dans l'acceptation rationnelle de ces déterminations.",
-            "La liberté consiste en l'absence de contrainte extérieure, permettant à l'individu d'agir selon sa volonté tant qu'il ne nuit pas aux autres."
-        ];
-
-        let currentWinner = null; // Position préférée actuelle
-        let usedDefinitions = new Set(); // Indices des définitions déjà vues
-        let currentRound = 0; // Compteur de tours
-        const maxRounds = 8;
-
-        // Fonction pour obtenir un index non encore utilisé
-        function getUnusedDefinitionIndex() {
-            for (let i = 0; i < definitions.length; i++) {
-                if (!usedDefinitions.has(i)) {
-                    return i;
-                }
-            }
-            return null;
-        }
-
-        // Met à jour les boutons avec les options actuelles
-        function updateButtons() {
-            if (currentRound < maxRounds) {
-                let newIndex = getUnusedDefinitionIndex();
-                if (newIndex === null) {
-                    alert("Toutes les définitions ont été utilisées !");
-                    return;
-                }
-
-                if (currentWinner === null) {
-                    currentWinner = definitions[newIndex];
-                    usedDefinitions.add(newIndex);
-                }
-
-                // Ajouter une autre phrase jamais vue
-                newIndex = getUnusedDefinitionIndex();
-                if (newIndex === null) {
-                    alert("Toutes les définitions ont été utilisées !");
-                    return;
-                }
-
-                option1.textContent = `1. ${currentWinner}`;
-                option2.textContent = `2. ${definitions[newIndex]}`;
-                usedDefinitions.add(newIndex);
-
-                currentRound++;
-            } else {
-                prompt.textContent = `Votre position préférée est : ${currentWinner}`;
-                option1.style.display = "none";
-                option2.style.display = "none";
-            }
-        }
-
-        // Gère le choix de l'utilisateur
-        function handleChoice(choice) {
-            currentWinner = choice === "option1" ? currentWinner : option2.textContent.slice(3);
-            updateButtons();
-        }
-
-        // Initialisation
-        const option1 = document.getElementById("option1");
-        const option2 = document.getElementById("option2");
-        const prompt = document.getElementById("prompt");
-
-        updateButtons();
-
-        option1.addEventListener("click", () => handleChoice("option1"));
-        option2.addEventListener("click", () => handleChoice("option2"));
-    </script>
-</body>
+### index.html
+ 
+<! DOCTYPE html> 
+<html lang="fr"> 
+<tête> 
+<meta charset="UTF-8">
+<title>Simulation de balle rebondissante</title> 
+< style > 
+ canvas { background : #eee ; display : block ; marge : 0 auto ; } 
+</style > 
+</tête> 
+<corps> 
+<canvas id="canvas"></canvas>
+ 
+<div style="align-texte :centre ; » > 
+ <label for="speed">Speed :</label> 
+ <input type="number » id="speed » value="5 » step="0.1 » onchange="updateSpeed(this.value) ; » désactivé> 
+  <br>
+ <input type="checkbox » id="gravityToggle » checked onchange="toggleGravity(this.checked) ; » > 
+  <label for="gravityToggle">Gravity</label>
+  <br>
+ <input type="checkbox » id="elasticityToggle » checked onchange="toggleElasticity(this.checked) ; » > 
+ <label for="elasticityToggle">Élasticité</label> 
+</div>
+ 
+<script src="script.js"></script>
+</corps> 
 </html>
+ 
+### script.js
+ 
+const canvas = document.getElementById('canvas') ; 
+const ctx = canvas.getContext('2d') ; 
+const speedInput = document.getElementById('vitesse') ; 
+ 
+const audioContext = new (fenêtre. AudioContext || window.webkitAudioContext)() ; 
+ 
+let ball = {
+ x : canvas.width / 2, 
+ y : canvas.height / 2, 
+ rayon : 20, 
+ dx : parseFloat(speedInput.value), 
+ dy : parseFloat(speedInput.value), 
+ gravité : 0,1, 
+ élasticité : 0,8, 
+ useGravity : true, 
+ useElasticity : true 
+};
+ 
+function playSound(fréquence = 440) { 
+ let oscillator = audioContext.createOscillator() ; 
+ oscillator.type = 'sinus' ; 
+ oscillator.frequency.setValueAtTime(fréquence, audioContext.currentTime) ; 
+ oscillator.connect(audioContext.destination) ; 
+ oscillator.start() ; 
+ oscillator.stop(audioContext.currentTime + 0.1) ; 
+}
+ 
+fonction drawBall() { 
+ ctx.beginPath() ; 
+ ctx.arc(balle.x, balle.y, balle.rayon, 0, Math.PI*2) ; 
+ ctx.fillStyle = '#0095DD' ; 
+ ctx.fill() ; 
+ ctx.closePath() ; 
+}
+ 
+fonction updateBall() { 
+  if (ball.useGravity) {
+ balle.dy += balle.gravité ; 
+  }
+ balle.x += balle.dx ; 
+ ball.y += balle.dy ; 
+ 
+ Détection de collision améliorée avec les parois 
+  if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0) {
+ balle.dx = -balle.dx ; 
+ ball.x = balle.x + balle.radius > canvas.width ? canvas.width - ball.radius : ball.radius ; 
+ playSound(400 + Math.random() * 200) ; 
+  }
+  if (ball.y + ball.radius > canvas.height || ball.y - ball.radius < 0) {
+ ball.dy = -ball.dy * (ball.useÉlasticité ? ball.élasticité : 1) ; 
+ ball.y = balle.y + balle.rayon > toile.hauteur ? canvas.height - ball.radius : ball.radius ; 
+ playSound(400 + Math.random() * 200) ; 
+  }
+}
+ 
+fonction draw() { 
+ ctx.clearRect(0, 0, canvas.width, canvas.height) ; 
+ drawBall() ; 
+ updateBall() ; 
+ requestAnimationFrame(dessin) ; 
+}
+ 
+function toggleGravity(coché) { 
+ ball.useGravity = vérifié ; 
+ checkDisabled() ; 
+}
+ 
+function toggleElasticity(coché) { 
+ ball.useElasticity = vérifié ; 
+ checkDisabled() ; 
+}
+ 
+fonction checkDisabled() { 
+ if ( !ball.useGravity & !ball.useElasticity) { 
+ speedInput.disabled = faux ; 
+ } sinon { 
+ speedInput.disabled = vrai ; 
+ speedInput.value = Math.sqrt(balle.dx * balle.dx + balle.dy * balle.dy).toFixed(1) ; 
+  }
+}
+ 
+fonction updateSpeed(value) { 
+ ball.dx = parseFloat(valeur) ; 
+ ball.dy = parseFloat(valeur) ; 
+}
+ 
+fonction resizeCanvas() { 
+ canvas.width = window.innerWidth * 0,9 ; 
+ canvas.height = window.innerHeight * 0,7 ; 
+    if (ball.x + ball.radius > canvas.width) {
+ ball.x = canvas.width - balle.rayon ; 
+    }
+    if (ball.y + ball.radius > canvas.height) {
+ ball.y = hauteur.toile - balle.rayon ; 
+    }
+}
+ 
+resizeCanvas() ; 
+window.addEventListener('redimensionner', redimensionnerCanvas) ; 
+dessin() ; 
